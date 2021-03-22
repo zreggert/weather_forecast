@@ -13,14 +13,30 @@ header {
 aside {
     display: flex;
     margin: 15px;
+    position: absolute;
     justify-content: flex-start;
+    border: 5px solid green;
+    width: 30%;
+    overflow: hidden;
+    z-index: 5;
+    padding: 10px;
 }
 
 main {
     display: flex;
     position: fixed;
     right: 0;
+    top: 175px;
     border: 5px solid red;
-    width: 70%;
+    width: 60%;
     padding: 10px;
+}
+
+li {
+    border:2px solid gray;
+    padding: 5px;
+}
+
+#city-search {
+    margin: 5px 0;
 }

@@ -1,0 +1,26 @@
+* {
+    margin: 0;
+    padding: 0;
+}
+
+header {
+    text-align: center;
+    background-color: black;
+    color: white;
+    padding: 35px;
+}    
+
+aside {
+    display: flex;
+    margin: 15px;
+    justify-content: flex-start;
+}
+
+main {
+    display: flex;
+    position: fixed;
+    right: 0;
+    border: 5px solid red;
+    width: 70%;
+    padding: 10px;
+}

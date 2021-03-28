@@ -30,6 +30,7 @@ main {
     border: 5px solid red;
     width: 60%;
     padding: 10px;
+    flex-direction: column;
 }
 
 li {
@@ -37,6 +38,46 @@ li {
     padding: 5px;
 }
 
+h5 {
+    padding-bottom: 15px;
+}
 #city-search {
     margin: 5px 0;
+}
+
+.currentCityAndDate {
+    border: 2px solid blue;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    width: 100%;
+}
+
+.presentDate {
+    margin-bottom: 30px;
+}
+
+.fiveDayForecast {
+    display: flex;
+    position: relative;
+}
+
+.prev-search-list {
+    display: flex;
+    flex-direction: column;
+}
+
+.future-forecasts {
+    border: 4px solid pink;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+}
+
+.weather-card {
+    border: 2px solid black;
+    height: 150px;
+    width: 125px;
+    display: flex;
+    flex-direction: row;
 }

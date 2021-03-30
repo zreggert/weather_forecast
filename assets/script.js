@@ -2,22 +2,33 @@ var today = moment();
 $('.present-date').text(moment().format('LLLL'));
 var prevSearches = JSON.parse(localStorage.getItem('searched-cities')) || [];
 
-var dayOne = $('<h4></h4>').text(moment().add(1, 'days').format('L'));
-$('#card1').append(dayOne);
-var dayTwo = $('<h4></h4>').text(moment().add(2, 'days').format('L'));
-$('#card2').append(dayTwo);
-var dayThree = $('<h4></h4>').text(moment().add(3, 'days').format('L'));
-$('#card3').append(dayThree);
-var dayFour = $('<h4></h4>').text(moment().add(4, 'days').format('L'));
-$('#card4').append(dayFour);
-var dayFive = $('<h4></h4>').text(moment().add(5, 'days').format('L'));
-$('#card5').append(dayFive);
+var dayOne = $('<h4 class="date"></h4>').text(moment().add(1, 'days').format('L'));
+$('#card1').prepend(dayOne);
+var dayTwo = $('<h4 class="date"></h4>').text(moment().add(2, 'days').format('L'));
+$('#card2').prepend(dayTwo);
+var dayThree = $('<h4 class="date"></h4>').text(moment().add(3, 'days').format('L'));
+$('#card3').prepend(dayThree);
+var dayFour = $('<h4 class="date"></h4>').text(moment().add(4, 'days').format('L'));
+$('#card4').prepend(dayFour);
+var dayFive = $('<h4 class="date"></h4>').text(moment().add(5, 'days').format('L'));
+$('#card5').prepend(dayFive);
 
+
+renderButtons();
+
+function renderButtons() {
+    $('.prev-search-list').empty();
+    for (var i = 0; i < prevSearches.length; i++) {
+        var cityButton = $('<button class="city-btn"></button>').text(prevSearches[i]);
+        $('.prev-search-list').append(cityButton);
+    }
+}
 
 $(document).ready(function() {
 
+    
     //search button stores the searched city to the array of previously searched cities and stores that array to local storage
-    $('.search-btn').click(function() {
+    $('.search-btn').click(function(event) {
         event.preventDefault();
         clearToday();
         var city = $('#city-search').val().trim();
@@ -37,10 +48,12 @@ $(document).ready(function() {
         renderButtons();
     })
 
+    // storing an array to local storage
     function storingCities(prevSearches) {
         localStorage.setItem("searched-cities", JSON.stringify(prevSearches));
     }
 
+    // clears data from previous searches
     function clearToday() {
         $('.current-city').text("");
         $('#temp').text("");
@@ -76,7 +89,6 @@ $(document).ready(function() {
             .then(function (cityData) {
                 console.log(cityData)
                 weatherReport(cityData);
-                // getFiveDayForecast(cityData);
             })
         })
     }
@@ -95,24 +107,30 @@ $(document).ready(function() {
         var uvIndex =  $('<p></p>').text(cityData.current.uvi);
         console.log(cityWind);
         $('#uv').append(uvIndex);
+        getFiveDayForecast(cityData);
     }
 
-    // function getFiveDayForecast(cityData) {
-    //     for ( i = 0; i < 5; i++) {
-    //         var futureTemp = $("<h4></h4>").text(cityData.daily[i].temp);
-    //         var futureHum = $("<h4></h4>").text(cityData.daily[i].humidity);
-            
-    //         if ( i = 0) {
-    //             $("#card1").append(futureTemp, futureHum)
-    //         }
-    //     }
-    // }
-
-    function renderButtons() {
-        $('.prev-search-list').empty();
-        for (var i = 0; i < prevSearches.length; i++) {
-            var cityButton = $('<button class="city-btn"></button>').text(prevSearches[i]);
-            $('.prev-search-list').append(cityButton);
+    function getFiveDayForecast(cityData) {
+        console.log(cityData);
+        var cards = $('.weather-card').toArray();
+        cards.forEach(element => {
+            for ( i = 0; i < 5; i++) {
+            var futureTemp = $("<h4></h4>").text(cityData.daily[i].temp);
+            console.log(futureTemp);
+            $(element).append(futureTemp)
+            var futureHum = $("<h4></h4>").text(cityData.daily[i].humidity);
+            console.log(futureHum);
+            $(element).append(futureHum)
         }
+        })
+        // for ( i = 0; i < 5; i++) {
+        //     var futureTemp = $("<h4></h4>").text(cityData.daily[i].temp);
+        //     console.log(futureTemp)
+        //     var futureHum = $("<h4></h4>").text(cityData.daily[i].humidity);
+            
+        //     if ( i = 0) {
+        //         $("#card1").append(futureTemp, futureHum)
+        //     }
+        //}
     }
 })

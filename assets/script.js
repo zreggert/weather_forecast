@@ -21,7 +21,7 @@ $(document).ready(function() {
         event.preventDefault();
         clearToday();
         var city = $('#city-search').val().trim();
-        //console.log(inputCity);
+        console.log(city);
         if (city == "") {
             return
         } else if (prevSearches.length >= 10) {
@@ -31,13 +31,14 @@ $(document).ready(function() {
             prevSearches.push(city);
         }
         
-        storingCities(city);
+        console.log(prevSearches);
+        storingCities(prevSearches);
         getWeatherData(city);
-        renderButtons(prevSearches);
+        renderButtons();
     })
 
-    function storingCities(city) {
-        localStorage.setItem("searched-cities", JSON.stringify(city));
+    function storingCities(prevSearches) {
+        localStorage.setItem("searched-cities", JSON.stringify(prevSearches));
     }
 
     function clearToday() {
@@ -48,7 +49,7 @@ $(document).ready(function() {
         $('#uv').text("");
     }
 
-    //function for the first 2 api calls. the first call is to get lattitude and longitude of the searched city so the second can get the one call api to get the temperature, humidty, and wind speed
+    // //function for the first 2 api calls. the first call is to get lattitude and longitude of the searched city so the second can get the one call api to get the temperature, humidty, and wind speed
     function getWeatherData(city) {
         console.log(city);
         var currentWeatherUrl = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=260502960360e1be7ff30b2693e2aa94`
@@ -75,12 +76,12 @@ $(document).ready(function() {
             .then(function (cityData) {
                 console.log(cityData)
                 weatherReport(cityData);
-                getFiveDayForecast(cityData);
+                // getFiveDayForecast(cityData);
             })
         })
     }
     
-    //function to populate data for the current city
+    // //function to populate data for the current city
     function weatherReport(cityData) {
         var cityTemp =  $('<p></p>').text(cityData.current.temp);
         console.log(cityTemp);
@@ -96,33 +97,22 @@ $(document).ready(function() {
         $('#uv').append(uvIndex);
     }
 
-    function getFiveDayForecast(cityData) {
-        for ( i = 0; i < 5; i++) {
-            var futureTemp = $("<h4></h4>").text(cityData.daily[i].temp);
-            var futureHum = $("<h4></h4>").text(cityData.daily[i].humidity);
+    // function getFiveDayForecast(cityData) {
+    //     for ( i = 0; i < 5; i++) {
+    //         var futureTemp = $("<h4></h4>").text(cityData.daily[i].temp);
+    //         var futureHum = $("<h4></h4>").text(cityData.daily[i].humidity);
             
-            if ( i = 0) {
-                $("#card1").append(futureTemp, futureHum)
-            }
-        }
-    }
+    //         if ( i = 0) {
+    //             $("#card1").append(futureTemp, futureHum)
+    //         }
+    //     }
+    // }
 
-    function renderButtons(prevSearches) {
+    function renderButtons() {
         $('.prev-search-list').empty();
         for (var i = 0; i < prevSearches.length; i++) {
-            var cityButton = $('<a class="city-btn"></a>').text(prevSearches[i]);
+            var cityButton = $('<button class="city-btn"></button>').text(prevSearches[i]);
             $('.prev-search-list').append(cityButton);
         }
     }
 })
-
-
-
-
-    
-
-
-
-
-
-

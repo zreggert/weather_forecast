@@ -108,3 +108,7 @@ h5 {
 .severe {
     background-color: red;
 }
+
+#color {
+    width: 75px;
+}

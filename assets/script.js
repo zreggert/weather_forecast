@@ -117,12 +117,12 @@ $(document).ready(function() {
         var uvIndex =  $('<p></p>').text(cityData.current.uvi);
         $('#uv').append(uvIndex);
 
-        if (uvIndex <= 3) {
-            $('#uv').addClass('favorable');
-        } else if (uvIndex > 3 && uvIndex < 6)  {
-            $('#uv').addClass('moderate');
+        if (cityData.current.uvi <= 3) {
+            $('#color').addClass('favorable');
+        } else if (cityData.current.uvi> 3 && cityData.current.uvi < 6)  {
+            $('#color').addClass('moderate');
         } else {
-            $('#uv').addClass('severe');
+            $('#color').addClass('severe');
         }
     }
 

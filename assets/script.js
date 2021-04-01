@@ -24,6 +24,7 @@ function renderButtons() {
     }
 }
 
+
 $(document).ready(function() {
 
     
@@ -32,9 +33,10 @@ $(document).ready(function() {
         event.preventDefault();
         clearToday();
         var city = $('#city-search').val().trim();
-        console.log(city);
         if (city == "") {
             return
+        } else if (prevSearches.includes(city)) {
+            renderButtons();
         } else if (prevSearches.length >= 10) {
             prevSearches.shift();
             prevSearches.push(city);
@@ -44,13 +46,20 @@ $(document).ready(function() {
         
         console.log(prevSearches);
         storingCities(prevSearches);
+        getWeatherData(city);   
+    })
+
+    $('.city-btn').click(function(event) {
+        clearToday();
+        event.preventDefault();
+        var city = $(this).text();
         getWeatherData(city);
-        renderButtons();
     })
 
     // storing an array to local storage
     function storingCities(prevSearches) {
         localStorage.setItem("searched-cities", JSON.stringify(prevSearches));
+        renderButtons();
     }
 
     // clears data from previous searches
@@ -60,11 +69,14 @@ $(document).ready(function() {
         $('#humidity').text("");
         $('#wind').text("");
         $('#uv').text("");
+        $('.fore-temp').text('');
+        $('.fore-humidity').text('');
+        $('.icon').attr("src", "");
+        $('#uv').removeClass();
     }
 
     // //function for the first 2 api calls. the first call is to get lattitude and longitude of the searched city so the second can get the one call api to get the temperature, humidty, and wind speed
     function getWeatherData(city) {
-        console.log(city);
         var currentWeatherUrl = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=260502960360e1be7ff30b2693e2aa94`
         
         fetch(currentWeatherUrl)
@@ -74,12 +86,12 @@ $(document).ready(function() {
         .then(function (data) {
             console.log(data);
             var cityName = data.name;
+            var weatherIcon = data.weather[0].icon;
             $('.current-city').append(cityName);
-            var lat = data.coord.lat
-            //console.log(lat);
-            var lon = data.coord.lon
-            //console.log(lon);
-
+            $(".todaysWeatherIcon").attr("src", `http://openweathermap.org/img/wn/${weatherIcon}.png`);
+            var lat = data.coord.lat;
+            var lon = data.coord.lon;
+            
             var oneCallUrl = `https://api.openweathermap.org/data/2.5/onecall?lat=${lat}&lon=${lon}&exclude={part}&appid=260502960360e1be7ff30b2693e2aa94&units=imperial`
 
             fetch(oneCallUrl)
@@ -87,8 +99,9 @@ $(document).ready(function() {
                 return response.json();
             })
             .then(function (cityData) {
-                console.log(cityData)
+                console.log(cityData);
                 weatherReport(cityData);
+                getFiveDayForecast(cityData);
             })
         })
     }
@@ -96,41 +109,40 @@ $(document).ready(function() {
     // //function to populate data for the current city
     function weatherReport(cityData) {
         var cityTemp =  $('<p></p>').text(cityData.current.temp);
-        console.log(cityTemp);
         $('#temp').append(cityTemp);
         var cityHum =  $('<p></p>').text(cityData.current.humidity);
-        console.log(cityHum);
         $('#humidity').append(cityHum);
         var cityWind =  $('<p></p>').text(cityData.current.wind_speed);
-        console.log(cityWind);
         $('#wind').append(cityWind);
         var uvIndex =  $('<p></p>').text(cityData.current.uvi);
-        console.log(cityWind);
         $('#uv').append(uvIndex);
-        getFiveDayForecast(cityData);
+
+        if (uvIndex <= 3) {
+            $('#uv').addClass('favorable');
+        } else if (uvIndex > 3 && uvIndex < 6)  {
+            $('#uv').addClass('moderate');
+        } else {
+            $('#uv').addClass('severe');
+        }
     }
 
     function getFiveDayForecast(cityData) {
         console.log(cityData);
-        var cards = $('.weather-card').toArray();
-        cards.forEach(element => {
-            for ( i = 0; i < 5; i++) {
-            var futureTemp = $("<h4></h4>").text(cityData.daily[i].temp);
-            console.log(futureTemp);
-            $(element).append(futureTemp)
-            var futureHum = $("<h4></h4>").text(cityData.daily[i].humidity);
-            console.log(futureHum);
-            $(element).append(futureHum)
+        var futureTemp = [];
+        var futureHum = [];
+        var iconArr = [];
+        for ( var i = 0; i < 5; i++) {
+            futureTemp.push(cityData.daily[i].temp.day);
+            futureHum.push(cityData.daily[i].humidity);
+            iconArr.push(cityData.daily[i].weather[0].icon);
         }
-        })
-        // for ( i = 0; i < 5; i++) {
-        //     var futureTemp = $("<h4></h4>").text(cityData.daily[i].temp);
-        //     console.log(futureTemp)
-        //     var futureHum = $("<h4></h4>").text(cityData.daily[i].humidity);
-            
-        //     if ( i = 0) {
-        //         $("#card1").append(futureTemp, futureHum)
-        //     }
-        //}
+        var icons = $('.icon').toArray();
+        var foreTemps = $('.fore-temp').toArray();
+        var foreHum = $('.fore-humidity').toArray();
+        for ( var i = 0; i < 5; i++) {
+            icons[i].setAttribute("src", `http://openweathermap.org/img/wn/${iconArr[i]}.png`);
+            foreTemps[i].append(futureTemp[i]);
+            foreHum[i].append(futureHum[i]);
+        }
     }
 })

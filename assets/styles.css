@@ -11,12 +11,11 @@ header {
 }    
 
 aside {
-    display: flex;
+    display: block;
     margin: 15px;
     position: absolute;
-    justify-content: flex-start;
     border: 5px solid darkgray;
-    width: 300px;
+    width: 200px;
     height: 400px;
     overflow: hidden;
     z-index: 5;
@@ -24,12 +23,12 @@ aside {
 }
 
 main {
-    display: flex;
+    display: block;
     position: absolute;
     right: 0;
-    top: 175px;
-    width: 70%;
-    padding: 10px;
+    top: 125px;
+    width: 73%;
+    padding: 5px;
     flex-direction: column;
     background-color: lightblue;
 }
@@ -71,7 +70,7 @@ h5 {
 .future-forecasts {
     display: flex;
     flex-direction: row;
-    justify-content: space-around;
+    justify-content: space-between;
 }
 
 .weather-card {

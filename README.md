@@ -7,7 +7,12 @@ For this project I created a weather dashboard that displays the date, temperatu
 Deployed Link:
 https://zreggert.github.io/weather_forecast/
 
-![weatherdashboard](./assets/weather_dash.png)[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+![weatherdashboard](./assets/weather_dash.png)
+![another screenshot of the dashboard](./assets/weather2.png)
+
+
+
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 Copyright (c) 2021 Zachary Eggert
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
